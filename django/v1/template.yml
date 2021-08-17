@@ -22,7 +22,7 @@ variables:
   SONAR_HOST_URL: "https://sonarqube.dev.thegang.tech"
 
 default:
-  before-script:
+  before_script:
     - if [ -z "$PROJECT_NAME" ]; then echo "PROJECTNAME is undefined" & exit 1;
     - if [ -z "$SONAR_TOKEN" ]; then echo "SONARTOKEN is undefined" & exit 1;
 
