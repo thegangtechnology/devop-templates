@@ -1,0 +1,73 @@
+image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:stable
+
+services:
+  - ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:dind
+  - name: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/postgres:12.2-alpine
+    alias: postgres
+
+stages:
+  - Lint
+  - Tests
+  - Static Test
+
+variables:
+  PYTHON_VERSION: 3.9
+  PROJECT_NAME: ""
+  POSTGRES_DB: test_db
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: "postgres"
+  POSTGRES_HOST_AUTH_METHOD: trust
+  DATABASE_URL: postgres://postgres:postgres@postgres:5432/{$POSTGRES_DB}
+  SONAR_TOKEN: "$SONAR_TOKEN"
+  SONAR_HOST_URL: "https://sonarqube.dev.thegang.tech"
+
+default:
+  before-script:
+    - if [ -z "$PROJECT_NAME" ]; then echo "PROJECTNAME is undefined" & exit 1;
+    - if [ -z "$SONAR_TOKEN" ]; then echo "SONARTOKEN is undefined" & exit 1;
+
+flake8:
+  stage: Lint
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/python:${PYTHON_VERSION}
+  before_script:
+    - pip install flake8
+  script:
+    - flake8
+  allow_failure: false
+
+test-and-coverage:
+  stage: Tests
+  image:
+    name: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/python:${PYTHON_VERSION}
+  before_script:
+    - pip install pipenv
+    - pip install coverage
+    - pipenv install --system --deploy --ignore-pipfile
+  script:
+    - coverage run manage.py test
+    - coverage report -m
+    - coverage xml
+  rules:
+    - when: on_success
+      allow_failure: false
+  artifacts:
+        paths:
+          - coverage.xml
+        expire_in: 1 week
+
+sonarqube:
+  stage: Static Test
+  image:
+    name: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/sonarsource/sonar-scanner-cli
+  script:
+    - sonar-scanner -Dsonar.projectKey=$PROJECT_NAME
+      -Dsonar.python.coverage.reportPaths=coverage.xml
+      -Dsonar.qualitygate.wait=true
+      -Dsonar.exclusions="*.xml, **/migrations/**, **/__init__.py, **/*.html, **/settings/**, manage.py, **/wsgi.py, **/asgi.py, **/tests/**/*"
+  dependencies:
+    - test-and-coverage
+  rules:
+    - when: on_success
+      allow_failure: false
+  variables:
+    GIT_DEPTH: 0
