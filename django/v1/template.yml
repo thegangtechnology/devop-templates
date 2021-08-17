@@ -11,7 +11,7 @@ stages:
   - Static Test
 
 variables:
-  PYTHON_VERSION: 3.9
+  PYTHON_VERSION: "3.9"
   PROJECT_NAME: ""
   POSTGRES_DB: test_db
   POSTGRES_USER: postgres
