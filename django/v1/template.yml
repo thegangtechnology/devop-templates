@@ -23,8 +23,8 @@ variables:
 
 default:
   before_script:
-    - if [ -z "$PROJECT_NAME" ]; then echo "PROJECTNAME is undefined" & exit 1;
-    - if [ -z "$SONAR_TOKEN" ]; then echo "SONARTOKEN is undefined" & exit 1;
+    - if [ -z "$PROJECT_NAME" ]; then echo "PROJECTNAME is undefined" & exit 1; fi
+    - if [ -z "$SONAR_TOKEN" ]; then echo "SONARTOKEN is undefined" & exit 1; fi
 
 flake8:
   stage: Lint
