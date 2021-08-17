@@ -1,0 +1,6 @@
+include:
+  remote: https://gitlab.com/piti118/devop-templates/-/raw/main/django/v1/template.yml
+
+variables:
+  PROJECT_NAME: sample_project
+  # DO NOT FORGET TO SET SONAR_TOKEN in CI_VARIABLE

@@ -21,11 +21,6 @@ variables:
   SONAR_TOKEN: "$SONAR_TOKEN"
   SONAR_HOST_URL: "https://sonarqube.dev.thegang.tech"
 
-default:
-  before_script:
-    - if [ -z "$PROJECT_NAME" ]; then echo "PROJECTNAME is undefined" & exit 1; fi
-    - if [ -z "$SONAR_TOKEN" ]; then echo "SONARTOKEN is undefined" & exit 1; fi
-
 flake8:
   stage: Lint
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/python:${PYTHON_VERSION}
@@ -59,6 +54,9 @@ sonarqube:
   stage: Static Test
   image:
     name: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/sonarsource/sonar-scanner-cli
+  before_script:
+    - if [ -z "$PROJECT_NAME" ]; then echo "PROJECTNAME is undefined" & exit 1; fi
+    - if [ -z "$SONAR_TOKEN" ]; then echo "SONARTOKEN is undefined" & exit 1; fi
   script:
     - sonar-scanner -Dsonar.projectKey=$PROJECT_NAME
       -Dsonar.python.coverage.reportPaths=coverage.xml
