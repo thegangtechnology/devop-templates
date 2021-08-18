@@ -1,4 +1,8 @@
-== Nuxt has a serious test setup bug for Vuetify ==
+## Example Repo
+
+https://gitlab.com/the-gang-technology/devop/nuxt-devop-test
+
+## Nuxt has a serious test setup bug for Vuetify
 To fix it you need `test/setup.js`
 
 ```js

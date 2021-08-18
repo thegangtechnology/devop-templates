@@ -3,11 +3,6 @@ include:
 
 image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:stable
 
-services:
-  - ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:dind
-  - name: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/postgres:12.2-alpine
-    alias: postgres
-
 stages:
   - Lint
   - Tests
