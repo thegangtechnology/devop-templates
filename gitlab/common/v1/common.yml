@@ -11,6 +11,13 @@
   script:
     - flake8 --max-line-length 120
 
+.run-pycodestyle:
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/python:${PYTHON_VERSION}
+  before_script:
+    - pip install pycodestyle
+  script:
+    - pycodestyle
+
 .run-sonarqube-python:
   image:
     name: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/sonarsource/sonar-scanner-cli

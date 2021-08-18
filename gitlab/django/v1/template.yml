@@ -33,7 +33,7 @@ workflow:
 flake8:
   stage: Lint
   extends:
-    - .run-flake8
+    - .run-pycodestyle
 
 test-and-coverage:
   stage: Tests
