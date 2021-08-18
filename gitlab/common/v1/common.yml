@@ -11,7 +11,7 @@
   script:
     - flake8 --max-line-length 120
 
-.run-sonarqube:
+.run-sonarqube-python:
   image:
     name: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/sonarsource/sonar-scanner-cli
   before_script:
@@ -25,6 +25,20 @@
   variables:
     GIT_DEPTH: 0
 
+.run-sonarqube-javascript:
+  image:
+    name: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/sonarsource/sonar-scanner-cli
+  before_script:
+    - if [ -z "$PROJECT_NAME" ]; then echo "PROJECTNAME is undefined" & exit 1; fi
+    - if [ -z "$SONAR_TOKEN" ]; then echo "SONARTOKEN is undefined" & exit 1; fi
+  script:
+    - sonar-scanner -Dsonar.projectKey=$PROJECT_NAME
+      -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+      -Dsonar.qualitygate.wait=true
+      -Dsonar.exclusions="*.xml, **/migrations/**, **/__init__.py, **/*.html, **/settings/**, manage.py, **/wsgi.py, **/asgi.py, **/tests/**/*"
+  variables:
+    GIT_DEPTH: 0
+
 .pip-caching:
   cache:
     key: "$CI_JOB_STAGE-$CI_COMMIT_REF_SLUG"
@@ -33,3 +47,11 @@
   variables:
     PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
+.npm-caching:
+  cache:
+    key: "$CI_JOB_STAGE-$CI_COMMIT_REF_SLUG"
+    untracked: true
+    paths:
+      - node_modules/
+      - .nuxt/
+      - .npm/
