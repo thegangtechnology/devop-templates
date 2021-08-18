@@ -1,5 +1,5 @@
-# include:
-#   remote: https://raw.githubusercontent.com/thegangtechnology/devop-templates/main/gitlab/common/v1/common.yml
+include:
+  remote: https://raw.githubusercontent.com/thegangtechnology/devop-templates/main/gitlab/common/v1/common.yml
 
 image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:stable
 
