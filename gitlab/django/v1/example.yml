@@ -1,5 +1,5 @@
 include:
-  remote: https://raw.githubusercontent.com/thegangtechnology/devop-templates/main/django/gitlab/v1/template.yml
+  remote: https://raw.githubusercontent.com/thegangtechnology/devop-templates/main/gitlab/django/v1/template.yml
 
 variables:
   PROJECT_NAME: sample_project
