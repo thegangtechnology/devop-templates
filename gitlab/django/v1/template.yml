@@ -57,20 +57,7 @@ test-and-coverage:
 
 sonarqube:
   stage: Static Test
-  image:
-    name: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/sonarsource/sonar-scanner-cli
-  before_script:
-    - if [ -z "$PROJECT_NAME" ]; then echo "PROJECTNAME is undefined" & exit 1; fi
-    - if [ -z "$SONAR_TOKEN" ]; then echo "SONARTOKEN is undefined" & exit 1; fi
-  script:
-    - sonar-scanner -Dsonar.projectKey=$PROJECT_NAME
-      -Dsonar.python.coverage.reportPaths=coverage.xml
-      -Dsonar.qualitygate.wait=true
-      -Dsonar.exclusions="*.xml, **/migrations/**, **/__init__.py, **/*.html, **/settings/**, manage.py, **/wsgi.py, **/asgi.py, **/tests/**/*"
   dependencies:
     - test-and-coverage
-  rules:
-    - when: on_success
-      allow_failure: false
-  variables:
-    GIT_DEPTH: 0
+  extends:
+    - .run-sonarqube
