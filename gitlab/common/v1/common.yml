@@ -16,7 +16,7 @@
   before_script:
     - pip install pycodestyle
   script:
-    - pycodestyle
+    - pycodestyle --max-line-length 120
 
 .run-sonarqube-python:
   image:
