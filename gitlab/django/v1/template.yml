@@ -37,12 +37,15 @@ flake8:
 
 test-and-coverage:
   stage: Tests
+  extends:
+    - .pip-caching
   image:
     name: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/python:${PYTHON_VERSION}
   before_script:
     - pip install pipenv
     - pip install coverage
-    - pipenv install --system --deploy --ignore-pipfile
+    - pipenv lock -r > requirements.txt
+    - pip install --no-cache-dir -r requirements.txt
   script:
     - coverage run manage.py test
     - coverage report -m
