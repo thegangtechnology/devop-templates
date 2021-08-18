@@ -21,6 +21,12 @@ variables:
   SONAR_TOKEN: "$SONAR_TOKEN"
   SONAR_HOST_URL: "https://sonarqube.dev.thegang.tech"
 
+.workflow:
+  rules:
+    - if: $CI_MERGE_REQUEST_IID
+    - if: $CI_COMMIT_TAG
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH=="develop"'
+
 flake8:
   stage: Lint
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/python:${PYTHON_VERSION}
