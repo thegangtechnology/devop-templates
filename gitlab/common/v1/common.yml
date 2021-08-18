@@ -24,3 +24,12 @@
       -Dsonar.exclusions="*.xml, **/migrations/**, **/__init__.py, **/*.html, **/settings/**, manage.py, **/wsgi.py, **/asgi.py, **/tests/**/*"
   variables:
     GIT_DEPTH: 0
+
+.pip-caching:
+  cache:
+    key: "$CI_JOB_STAGE-$CI_COMMIT_REF_SLUG"
+    paths:
+      - .cache/pip
+  variables:
+    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
